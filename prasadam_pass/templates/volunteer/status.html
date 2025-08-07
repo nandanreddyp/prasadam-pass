@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome | Prasadam Pass</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #fff8f0;
+            color: #4e2600;
+            margin: 0;
+            padding: 0 1rem;
+        }
+
+        header {
+            text-align: center;
+            padding: 1.5rem 0;
+            background-color: #fdd9a0;
+            border-bottom: 2px solid #e8c070;
+        }
+
+        main {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(100vh - 250px); /* accounts for header + footer */
+            padding: 1rem;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 2rem;
+        }
+
+        h3 {
+            margin-top: 2rem;
+            color: #a35c00;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 0.3rem;
+        }
+
+        .event-card {
+            background-color: #fff5e0;
+            border: 1px solid #e2c79c;
+            border-radius: 10px;
+            padding: 1rem;
+            margin: 1rem 0;
+            box-shadow: 2px 2px 6px rgba(0,0,0,0.05);
+        }
+
+        .event-card h4 {
+            margin: 0 0 0.3rem 0;
+            color: #6e3c00;
+        }
+
+        .event-card p {
+            font-size: 0.9rem;
+            margin: 0.3rem 0;
+        }
+
+        .register-btn {
+            display: inline-block;
+            margin-top: 0.5rem;
+            background-color: #ffa94d;
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .register-btn:hover {
+            background-color: #ff922b;
+        }
+
+        footer {
+            text-align: center;
+            font-size: 0.8rem;
+            padding: 1rem;
+            color: #a87c4f;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>QR status</h1>
+    </header>
+
+    <main>
+        <div style="max-width: 400px; margin: auto; padding: 20px; background-color: #fff8e1; border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); text-align: center; font-family: 'Segoe UI', sans-serif;">
+
+            <h2 style="color: #8b4513; margin-bottom: 20px;">Prasadam Status</h2>
+
+            {% if not registration.is_checked_in %}
+                <form method="POST">
+                    {% csrf_token %}
+                    <button type="submit" style="background-color: #d4af37; color: white; border: none; padding: 12px 20px; font-size: 16px; border-radius: 10px; cursor: pointer;">
+                        🍛 Mark Prasadam Given
+                    </button>
+                </form>
+            {% else %}
+                <p style="font-size: 18px; color: red; font-weight: bold; margin-top: 10px;">
+                    ✅ Prasadam Given!
+                </p>
+            {% endif %}
+
+            <br>
+            <button style="padding: 10px;"><a href="/scan" style="text-decoration: none; color: black;">Back to scan</a></button>
+
+        </div>
+    </main>
+
+    <footer>
+        Hare Krishna 🙏 | ISKCON Food Relief | <a href="https://iskcon.org" target="_blank">iskcon.org</a>
+    </footer>
+</body>
+</html>

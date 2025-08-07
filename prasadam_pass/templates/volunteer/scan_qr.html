@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Scan QR</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #fff8f0;
+            color: #4e2600;
+            margin: 0;
+            padding: 0 1rem;
+        }
+
+        header {
+            text-align: center;
+            padding: 1.5rem 0;
+            background-color: #fdd9a0;
+            border-bottom: 2px solid #e8c070;
+        }
+
+        main {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(100vh - 250px); /* accounts for header + footer */
+            padding: 1rem;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 2rem;
+        }
+
+        h3 {
+            margin-top: 2rem;
+            color: #a35c00;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 0.3rem;
+        }
+
+        .event-card {
+            max-width: 500px;
+            margin: 0 auto;
+            background: #fff5e0;
+            padding: 1rem;
+            border-radius: 10px;
+            border: 1px solid #e2c79c;
+        }
+
+        .event-card h4 {
+            margin: 0 0 0.3rem 0;
+            color: #6e3c00;
+        }
+
+        .event-card p {
+            font-size: 0.9rem;
+            margin: 0.3rem 0;
+        }
+
+        .register-btn {
+            display: inline-block;
+            margin-top: 0.5rem;
+            background-color: #ffa94d;
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .register-btn:hover {
+            background-color: #ff922b;
+        }
+
+        footer {
+            text-align: center;
+            font-size: 0.8rem;
+            padding: 1rem;
+            color: #a87c4f;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Scan QR to Check In</h1>
+    </header>
+    
+    <main>
+        <div id="reader" class="event-card" style="width: 300px;"></div>
+        <div id="result"></div>
+
+        <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+        <script>
+        function onScanSuccess(decodedText, decodedResult) {
+            // Stop the scanner to prevent multiple redirects
+            html5QrCode.stop().then(() => {
+                console.log("QR scanning stopped.");
+                window.location.href = decodedText;
+            }).catch(err => {
+                console.error("Failed to stop scanning:", err);
+                // Redirect anyway if stopping fails
+                window.location.href = decodedText;
+            });
+        }
+
+        const html5QrCode = new Html5Qrcode("reader");
+
+        Html5Qrcode.getCameras().then(devices => {
+            if (devices && devices.length) {
+                // Try to use rear camera if available
+                const rearCam = devices.find(d => d.label.toLowerCase().includes('back')) || devices[0];
+
+                html5QrCode.start(
+                    rearCam.id,
+                    { fps: 10, qrbox: 250 },
+                    onScanSuccess
+                );
+            } else {
+                document.getElementById('result').innerText = "No camera found.";
+            }
+        }).catch(err => {
+            document.getElementById('result').innerText = "Camera error: " + err;
+        });
+        </script>
+    </main>
+
+    <footer>
+        Hare Krishna 🙏 | ISKCON Food Relief | <a href="https://iskcon.org" target="_blank">iskcon.org</a>
+    </footer>
+</body>
+</html>

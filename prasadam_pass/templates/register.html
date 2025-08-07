@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register for {{ event.name }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #fff8f0;
+            color: #4e2600;
+            padding: 1rem;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: #fff5e0;
+            padding: 1rem;
+            border-radius: 10px;
+            border: 1px solid #e2c79c;
+        }
+
+        form {
+            background: #fff5e0;
+            padding-right: 1rem;
+        }
+
+        h2 {
+            text-align: center;
+            color: #a35c00;
+        }
+
+        label {
+            display: block;
+            margin-top: 1rem;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.6rem;
+            padding-right: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        button {
+            margin-top: 1.5rem;
+            width: 100%;
+            padding: 0.7rem;
+            background-color: #f7b733;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        button:hover {
+            background-color: #e89c00;
+        }
+
+        .note {
+            text-align: center;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        Request Prasadam for event:
+        <h2>{{ event.name }}</h2>
+
+        <form method="POST">
+            {% csrf_token %}
+            <label for="full_name">Full Name <span style="color: red;">*</span></label>
+            <input type="text" name="full_name" required placeholder="Your first name and last name">
+
+            <label for="phone_number">Phone Number <span style="color: red;">*</span></label>
+            <input type="tel" name="phone_number" required placeholder="10 digit Indian mobile number"
+                pattern="[6-9][0-9]{9}"
+                maxlength="10"
+                title="Enter a valid 10-digit Indian mobile number starting with 6-9.">
+
+            <label for="pincode">PIN Code <span style="color: red;">*</span></label>
+            <input type="text" name="pincode" required placeholder="6 digit pin code"
+                pattern="[1-9][0-9]{5}"
+                maxlength="6"
+                inputmode="numeric"
+                title="Enter a valid 6-digit PIN code.">
+
+            <button type="submit">Request a Prasadam</button>
+        </form>
+
+        <div class="note">
+            🙏 Hare Krishna! Thank you for joining us.
+        </div>
+    </div>
+</body>
+</html>
