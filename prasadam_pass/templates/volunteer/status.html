@@ -96,6 +96,8 @@
 
             {% if not registration.is_checked_in %}
                 <form method="POST">
+                    <h3>{{ registration.event.name }} - {{ registration.event.date }}</h3>
+                    <h2>{{ registration.full_name }} - {{ registration.slot }}</h2>
                     {% csrf_token %}
                     <button type="submit" style="background-color: #d4af37; color: white; border: none; padding: 12px 20px; font-size: 16px; border-radius: 10px; cursor: pointer;">
                         🍛 Mark Prasadam Given

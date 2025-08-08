@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import path
-from .views import home, event_registration, show_qr, scan_qr, process_qr_checkin
+from .views import home, event_registration, show_qr, scan_qr, process_qr_checkin, download_qr
 
 urlpatterns = [
     path('admin', admin.site.urls),
@@ -26,6 +26,7 @@ urlpatterns = [
     path('', home, name='home'),
     path('event/<int:event_id>', event_registration, name='event_registration'),
     path('qr/<str:token>', show_qr, name='show_qr'),
+    path('qr/download/<str:token>', download_qr, name='download_qr'),
     path('scan', scan_qr, name='scan_qr'),
     path('checkin/<str:token>', process_qr_checkin, name='process_qr_checkin')
 ]

@@ -1,7 +1,10 @@
 import qrcode
 import io
 import base64
+from PIL import Image, ImageDraw, ImageFont
+from io import BytesIO
 
+from django.http import HttpResponse
 from django.shortcuts import render, get_list_or_404, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required, user_passes_test
 from .models import Registration, Event
@@ -9,7 +12,7 @@ from .models import Registration, Event
 
 # home page to list events
 def home(request):
-    events = [event.to_dict() for event in Event.objects.all()]
+    events = [event.to_dict() for event in Event.objects.all().order_by('-created_at')]
 
     return render(request, 'index.html', {
         'events': events
@@ -20,14 +23,24 @@ def event_registration(request, event_id):
     event = get_object_or_404(Event, pk=event_id)
 
     if request.method == 'GET':
-        return render(request, 'register.html', {'event': event})
+        registrations = "None"
 
+        phone_number = request.GET.get('phone_number')
+        if phone_number:
+            registrations = [reg.to_dict() for reg in Registration.objects.filter(phone_number=phone_number, event_id=event_id)]
+
+        return render(request, 'register.html', {
+            'event': event.to_dict(),
+            'registrations': registrations
+        })
+        
     elif request.method == 'POST':
         full_name = request.POST.get('full_name')
         phone_number = request.POST.get('phone_number')
         pincode = request.POST.get('pincode')
+        slot = request.POST.get('slot')
 
-        if not all([full_name, phone_number, pincode]):
+        if not all([full_name, phone_number, pincode, slot]):
             return render(request, 'register.html', {
                 'event': event,
                 'error': 'All fields are required!'
@@ -37,7 +50,8 @@ def event_registration(request, event_id):
             event=event,
             full_name=full_name,
             phone_number=phone_number,
-            pincode=pincode
+            pincode=pincode,
+            slot=slot
         )
 
         # send QR code to whatsapp of number given
@@ -61,6 +75,44 @@ def show_qr(request, token):
         'qr_code': img_base64,
         'checkin_url': qr_data,
     })
+
+def download_qr(request, token):
+    registration = get_object_or_404(Registration, token=token)
+    
+    # Step 1: Generate QR code
+    qr_img = qrcode.make(f"{request.build_absolute_uri('/checkin/' + token)}")
+    
+    # Step 2: Create a new canvas bigger than QR
+    canvas_width = 400
+    canvas_height = 500
+    canvas = Image.new('RGB', (canvas_width, canvas_height), color=(255, 248, 240))  # light background
+    
+    # Step 3: Paste QR in center
+    qr_size = 300
+    qr_img = qr_img.resize((qr_size, qr_size))
+    canvas.paste(qr_img, ((canvas_width - qr_size) // 2, 100))  # leave top space for text
+    
+    # Step 4: Draw text
+    draw = ImageDraw.Draw(canvas)
+    try:
+        font = ImageFont.truetype("arial.ttf", 24)  # You can replace with a custom font
+    except:
+        font = ImageFont.load_default()
+    
+    draw.text((canvas_width // 2, 20), registration.event.name, font=font, fill=(78, 38, 0), anchor="mm")
+    draw.text((canvas_width // 2, 60), registration.full_name, font=font, fill=(163, 92, 0), anchor="mm")
+
+    draw.text((canvas_width // 2, 480), "Prasadam Pass - " + registration.slot, font=font, fill=(163, 92, 0), anchor="mm")
+    
+    # Step 5: Send as downloadable image
+    buffer = BytesIO()
+    canvas.save(buffer, format="PNG")
+    buffer.seek(0)
+
+    response = HttpResponse(buffer, content_type="image/png")
+    response['Content-Disposition'] = f'attachment; filename="PrasadamPass - {registration}.png"'
+    return response
+
 
 ### volunteer routes ###
 ########################

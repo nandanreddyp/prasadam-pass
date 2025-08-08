@@ -83,8 +83,26 @@
 
 <body>
     <header>
-        <h1>🙏 Welcome to Prasadam Pass</h1>
-        <p>Powered by ISKCON seva</p>
+        <div>
+
+        <img src="https://studygita.com/wp-content/uploads/2021/06/logo-big.jpg" style="width: 50px; mix-blend-mode: multiply;" alt="">
+        
+        <div style="display: flex; align-items: center; justify-content: center; width: 100%; gap: 10px;">
+
+            <div>
+                <h1>International Society for Krishna Consciousness
+                <h3>Founder Acharya : His Divine Grace A.C Bhakti Vedanta Swami Śrila Prabhupada</h3>
+                <h2>Welcome to Prasadam Registration Service</h2>
+                <p>Powered by ISKCON Chennai</p>
+            </div>
+        
+        </div>
+
+        <img src="https://static.wixstatic.com/media/93fd4c_02df34c7b34f415b94e991eaa39e430f~mv2.png/v1/fill/w_311,h_189,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/prabhupada%20png.png" style="width: 10px; mix-blend-mode: multiply;" alt="">
+
+        </div>
+
+
         <button style="padding: 5px; border-radius: 30px;"><a href="/login" style="text-decoration: none;">Volunteer Login</a></button>
     </header>
 
@@ -96,7 +114,7 @@
             <h4>{{ event.name }}</h4>
             <p><strong>Date:</strong> {{ event.date }}</p>
             <p>{{ event.description|truncatewords:20 }}</p>
-            <a href="/event/{{ event.id }}" class="register-btn">Register Now</a>
+            <a href="/event/{{ event.id }}" class="register-btn">Register</a>
         </div>
         {% empty %}
         <p>No upcoming events at the moment. Please check back soon!</p>
