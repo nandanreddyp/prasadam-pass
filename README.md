@@ -14,8 +14,10 @@ Allows devotees to book slots, receive a WhatsApp-confirmation link, and present
 ## 🚀 Tech Stack
 
 - Django (all-in-one: backend, frontend, ORM)
-- SQLite/PostgreSQL
+- SQLite (locally) /PostgreSQL (prod)
 - Python `qrcode` for QR image generation
-- Whatsapp Business API
 
-Hare Krishna 🙏
+## env
+pip install python -decouple
+create .env with SECRET_KEY, DATABASE_URL
+
