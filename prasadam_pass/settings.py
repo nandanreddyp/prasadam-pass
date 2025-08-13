@@ -30,7 +30,7 @@ SECRET_KEY = config("SECRET_KEY", default='django-insecure-63g)qh+6xut=f$$_e6x^a
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DEBUG", default=False, cast=bool)
 
-ALLOWED_HOSTS = ['127.0.0.1', '.vercel.app']
+ALLOWED_HOSTS = ['127.0.0.1', '.vercel.app', 'localhost']
 CSRF_TRUSTED_ORIGINS = [
     config("CSRF_TRUSTED_ORIGINS")
 ]
